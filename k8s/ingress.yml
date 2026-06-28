@@ -3,13 +3,19 @@ kind: Ingress
 metadata:
   name: amazona-ingress
   namespace: amazona
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
+  ingressClassName: nginx
   rules:
     - host: amazona.local
       http:
         paths:
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: backend
+                port:
+                  number: 4000
           - path: /
             pathType: Prefix
             backend:
@@ -17,10 +23,3 @@ spec:
                 name: frontend
                 port:
                   number: 80
-          - path: /api
-            pathType: Prefix
-            backend:
-              service:
-                name: backend
-                port:
-                  number: 5000
